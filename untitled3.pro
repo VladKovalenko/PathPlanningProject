@@ -5,3 +5,6 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp
+win32 { 
+QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++ 
+}
