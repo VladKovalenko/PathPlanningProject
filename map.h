@@ -19,18 +19,15 @@
 
 class Map
 {
-    private:
+    public:
         int     height, width;
         int     start_i, start_j;
         int     goal_i, goal_j;
         double  cellSize;
         int**   Grid;
-
-    public:
         Map();
         Map(const Map& orig);
         ~Map();
-
         bool getMap(const char *FileName);
         bool CellIsTraversable (int i, int j) const;
         bool CellOnGrid (int i, int j) const;
