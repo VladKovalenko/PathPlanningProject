@@ -27,17 +27,19 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
 
     pathNODE.parent = nullptr;
 
-    pathNODE.i = map.start_i;
+    pathNODE.i = map.getstarti();
 
-    pathNODE.j = map.start_j;
+    pathNODE.j = map.getstartj();
 
     pathNODE.g = 0;
 
-    pathNODE.H = computeHFromCellToCell(map.start_i, map.start_j, map.goal_i, map.goal_j, options);
+    pathNODE.H = computeHFromCellToCell(map.getstarti(), map.getstartj(), map.getgoali(), map.getgoalj(), options);
 
     pathNODE.F = pathNODE.H * hweight;
 
     bool done = 0;
+
+    open.push_back(pathNODE);
 
     while(!open.empty()) {
         pathNODE = findMinNode();
@@ -50,9 +52,9 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
 
         Node curGoal;
 
-        curGoal.i = map.goal_i;
+        curGoal.i = map.getgoali();
 
-        curGoal.j = map.goal_j;
+        curGoal.j = map.getgoalj();
 
         if (curGoal == pathNODE) {
             done = 1;
@@ -66,7 +68,7 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
             while(curIter != curSuccessors.end()) {
                 (*curIter).parent = &(close.find(pathNODE.i * 1000000000000 + pathNODE.j)->second);
 
-                (*curIter).H = computeHFromCellToCell((*curIter).i, (*curIter).j, map.goal_i, map.goal_j, options);
+                (*curIter).H = computeHFromCellToCell((*curIter).i, (*curIter).j, map.getgoali(), map.getgoalj(), options);
 
                 (*curIter).F =  hweight * (*curIter).H + (*curIter).g;
 

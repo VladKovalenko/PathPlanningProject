@@ -19,12 +19,13 @@
 
 class Map
 {
-    public:
+    private:
         int     height, width;
         int     start_i, start_j;
         int     goal_i, goal_j;
         double  cellSize;
         int**   Grid;
+    public:
         Map();
         Map(const Map& orig);
         ~Map();
@@ -36,6 +37,10 @@ class Map
         int getMapHeight() const;
         int getMapWidth() const;
         double getCellSize() const;
+        int getstarti() const;
+        int getstartj() const;
+        int getgoali() const;
+        int getgoalj() const;
 
 };
 
