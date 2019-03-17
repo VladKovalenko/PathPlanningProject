@@ -8,7 +8,7 @@ ISearch::ISearch()
 
 ISearch::~ISearch(void) {}
 
-int findopen(Node node, std::vector<Node> open){
+int ISearch::findopen(Node node){
     for(int i = 0; i < open.size(); ++i){
         if(open[i] == node) {
             return i;
@@ -44,10 +44,10 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
     while(!open.empty()) {
         pathNODE = findMinNode();
 
-        close.insert(std::make_pair(pathNODE.i * 1000000000000 + pathNODE.j, pathNODE));
+        close.insert(std::make_pair(pathNODE.i * map.getMapWidth() + pathNODE.j, pathNODE));
 
-        if (findopen(pathNODE, open) != -1) {
-            open.erase(open.begin() + findopen(pathNODE, open));
+        if (findopen(pathNODE) != -1) {
+            open.erase(open.begin() + findopen(pathNODE));
         }
 
         Node curGoal;
@@ -66,19 +66,30 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
             std::list<Node>::iterator curIter = curSuccessors.begin();
 
             while(curIter != curSuccessors.end()) {
-                (*curIter).parent = &(close.find(pathNODE.i * 1000000000000 + pathNODE.j)->second);
+                (*curIter).parent = &(close.find(pathNODE.i * map.getMapWidth() + pathNODE.j)->second);
 
                 (*curIter).H = computeHFromCellToCell((*curIter).i, (*curIter).j, map.getgoali(), map.getgoalj(), options);
 
                 (*curIter).F =  hweight * (*curIter).H + (*curIter).g;
 
-                open.push_back(*curIter);
+                if(findopen(*curIter) != -1) {
+                    if(open[findopen(*curIter)].F > (*curIter).F) {
+                        open[findopen(*curIter)] = (*curIter);
+                    } else if(open[findopen(*curIter)].F == (*curIter).F){
+                        if(breakingties == CN_SP_BT_GMAX && open[findopen(*curIter)].g > (*curIter).g){
+                            open[findopen(*curIter)] = (*curIter);
+                        } else if(breakingties == CN_SP_BT_GMIN && open[findopen(*curIter)].g < (*curIter).g){
+                            open[findopen(*curIter)] = (*curIter);
+                        }
+                    }
+                } else {
+                    open.push_back(*curIter);
+                }
 
                 ++curIter;
             }
         }
     }
-
     std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::now();
 
     sresult.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()) / 1000000000;
@@ -110,12 +121,12 @@ Node ISearch::findMinNode() {
     minNode.F = std::numeric_limits<double>::infinity();
 
     for (int i = 0; i < open.size(); i++) {
-        if(open[i].F > minNode.F){
+        if(open[i].F < minNode.F){
             minNode = open[i];
         } else if(open[i].F == minNode.F){
-            if(breakingties = CN_SP_BT_GMAX && open[i].g > minNode.g){
+            if(breakingties == CN_SP_BT_GMAX && open[i].g > minNode.g){
                 minNode = open[i];
-            } else if(breakingties = CN_SP_BT_GMIN && open[i].g < minNode.g){
+            } else if(breakingties == CN_SP_BT_GMIN && open[i].g < minNode.g){
                 minNode = open[i];
             }
         }
@@ -131,32 +142,29 @@ std::list<Node> ISearch::findSuccessors(Node curNode, const Map &map, const Envi
     Node successor;
 
     for(int i = -1; i < 2; ++i) {
-        for(int j = -1; j < 2; ++i) {
-            if((i != 0 || j != 0) && !map.CellIsObstacle(curNode.i + i, curNode.j + j) &&
-             map.CellOnGrid(curNode.i + i, curNode.j + j)) {
-                if(i != 0 && j != 0 && !options.allowdiagonal) {
-                    continue;
-                } else if(i != 0 && j != 0 && !options.cutcorners &&
-                 map.CellIsObstacle(curNode.i, curNode.j + j) ||
-                 map.CellIsObstacle(curNode.i + i, curNode.j)) {
-                    continue;
-                 } else if(i != 0 && j != 0 && !options.allowsqueeze &&
-                 map.CellIsObstacle(curNode.i, curNode.j + j) &&
-                 map.CellIsObstacle(curNode.i + i, curNode.j)) {
-                    continue;
-                 } else if (close.find((curNode.i + i) * 1000000000000 + curNode.j + j) == close.end()){
-                    successor.i = curNode.i + i;
+        for(int j = -1; j < 2; ++j) {
+            if(!(i == 0 && j == 0)) {
+                if(map.CellOnGrid(curNode.i + i, curNode.j + j) && map.CellIsTraversable(curNode.i + i, curNode.j + j)) {
+                    if((i == 0 || j == 0) || (i!= 0 && j != 0 && (options.allowdiagonal || (options.allowsqueeze &&
+                                                                     map.CellIsObstacle(curNode.i, curNode.j + j) &&
+                                                     map.CellIsObstacle(curNode.i + i, curNode.j)) ||
+                                (options.cutcorners && (map.CellIsObstacle(curNode.i, curNode.j + j)
+                                                        || map.CellIsObstacle(curNode.i + i, curNode.j)))))) {
+                        if(close.find((curNode.i + i) * map.getMapWidth() + (curNode.j + j)) == close.end()) {
+                            successor.i = curNode.i + i;
 
-                    successor.j = curNode.j + j;
+                            successor.j = curNode.j + j;
 
-                    if(i != 0 && j != 0) {
-                        successor.g = curNode.g + sqrt(2);
-                    } else {
-                        successor.g = curNode.g + 1;
+                            if(i == 0 || j == 0) {
+                                successor.g = curNode.g + 1;
+                            } else {
+                                successor.g = curNode.g + sqrt(2);
+                            }
+
+                                successors.push_back(successor);
+                        }
                     }
-
-                    successors.push_back(successor);
-                 }
+                }
             }
         }
     }
@@ -164,12 +172,8 @@ std::list<Node> ISearch::findSuccessors(Node curNode, const Map &map, const Envi
     return successors;
 }
 
-void ISearch::makePrimaryPath(Node curNode)
+void ISearch::makePrimaryPath(Node pathNode)
 {
-    Node pathNode;
-
-    curNode = pathNode;
-
     while(pathNode.parent) {
         lppath.push_front(pathNode);
 

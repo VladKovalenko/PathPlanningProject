@@ -41,7 +41,7 @@ class ISearch
 
 
 
-        int findopen(Node node, std::vector<Node> open);
+        int findopen(Node node);
         double computeHFromCellToCell(int start_i, int start_j, int fin_i, int fin_j, const EnvironmentOptions &options) {return 0;}
         std::list<Node> findSuccessors(Node curNode, const Map &map, const EnvironmentOptions &options);
         void makePrimaryPath(Node curNode);//Makes path using back pointers
