@@ -24,6 +24,7 @@ SOURCES += \
     config.cpp \
     astar.cpp \
     main.cpp \
+    thetastar.cpp \
     environmentoptions.cpp
 
 HEADERS += \
@@ -39,4 +40,5 @@ HEADERS += \
     config.h \
     astar.h \
     searchresult.h \
+    thetastar.h \
     environmentoptions.h

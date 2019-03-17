@@ -68,6 +68,8 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
             while(curIter != curSuccessors.end()) {
                 (*curIter).parent = &(close.find(pathNODE.i * map.getMapWidth() + pathNODE.j)->second);
 
+                *curIter = resetParent(*curIter, *((*curIter).parent), map);
+
                 (*curIter).H = computeHFromCellToCell((*curIter).i, (*curIter).j, map.getgoali(), map.getgoalj(), options);
 
                 (*curIter).F =  hweight * (*curIter).H + (*curIter).g;
@@ -212,8 +214,7 @@ void ISearch::makeSecondaryPath()
 
         --curIter;
 
-        if((presx - middlex == 0 && middlex - nextx != 0 && presy - middley != 0 && middley - nexty == 0) ||
-            (presx - middlex != 0 && middlex - nextx == 0 && presy - middley == 0 && middley - nexty != 0)) {
+        if(nextx - middlex != middlex - presx || nexty - middley != middley - presy) {
             hppath.push_front(*curIter);
         }
     }

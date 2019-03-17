@@ -4,6 +4,7 @@
 #include "xmllogger.h"
 #include "gl_const.h"
 #include <iostream>
+#include "thetastar.h"
 
 Mission::Mission()
 {
@@ -66,8 +67,8 @@ void Mission::createSearch()
         search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
     //else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_JP_SEARCH)
     //    search = new JP_Search(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
-    //else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_TH)
-    //    search = new Theta(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
+    else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_TH)
+        search = new Theta(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
 }
 
 void Mission::startSearch()

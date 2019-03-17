@@ -525,8 +525,8 @@
         </grid>
     </map>
     <algorithm>
-        <metrictype>diagonal</metrictype>
-        <searchtype>astar</searchtype>
+        <metrictype>euclidean</metrictype>
+        <searchtype>theta</searchtype>
         <hweight>1</hweight>
         <breakingties>g-max</breakingties>
         <cutcorners>false</cutcorners>
