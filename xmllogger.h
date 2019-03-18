@@ -2,6 +2,7 @@
 #define	XMLLOGGER_H
 #include "tinyxml2.h"
 #include "ilogger.h"
+#include <map>
 
 
 //That's the class that flushes the data to the output XML
@@ -20,7 +21,7 @@ public:
 
     void writeToLogMap(const Map &Map, const std::list<Node> &path);
 
-    //void writeToLogOpenClose(const typename &open, const typename &close);
+    void writeToLogOpenClose(const std::vector<Node> &open, const std::map<int, Node> &close, bool last);
 
     void writeToLogPath(const std::list<Node> &path);
 

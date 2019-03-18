@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.7.1, 2019-03-17T21:45:49. -->
+<!-- Written by QtCreator 4.7.1, 2019-03-18T19:48:16. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -310,7 +310,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/Users/vladislavkovalenko/Desktop/fromzero/ASearch.pro</value>
     <value type="bool" key="QmakeProjectManager.QmakeRunConfiguration.UseDyldImageSuffix">false</value>
     <value type="bool" key="QmakeProjectManager.QmakeRunConfiguration.UseLibrarySearchPath">true</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">/Users/vladislavkovalenko/Desktop/fromzero/example.xml</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">/Users/vladislavkovalenko/Desktop/fromzero/damn.xml</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">ASearch.pro</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">/Users/vladislavkovalenko/Desktop/build-ASearch-Desktop_Qt_5_11_2_clang_64bit-Debug</value>

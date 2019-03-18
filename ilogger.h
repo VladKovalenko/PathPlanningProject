@@ -4,6 +4,7 @@
 #include "node.h"
 #include <unordered_map>
 #include <list>
+#include  <map>
 
 class ILogger
 {
@@ -12,7 +13,7 @@ class ILogger
         virtual bool getLog(const char* FileName, const std::string* LogParams) = 0;
         virtual void saveLog() = 0;
         virtual void writeToLogMap(const Map& map, const std::list<Node>& path) = 0;
-        //virtual void writeToLogOpenClose(const typename &open, const typename &close) = 0;
+        virtual void writeToLogOpenClose(const std::vector<Node> &open, const std::map<int, Node> &close, bool lasts) = 0;
         virtual void writeToLogPath(const std::list<Node>& path) = 0;
         virtual void writeToLogHPpath(const std::list<Node>& path) = 0;
         virtual void writeToLogNotFound() = 0;

@@ -48,7 +48,7 @@
         <openallowduplicates>true</openallowduplicates>
     </algorithm>
     <options>
-        <loglevel>1</loglevel>
+        <loglevel>2</loglevel>
         <logpath />
         <logfilename />
     </options>

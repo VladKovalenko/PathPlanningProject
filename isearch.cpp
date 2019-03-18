@@ -91,7 +91,11 @@ SearchResult ISearch::startSearch(ILogger *Logger, const Map &map, const Environ
                 ++curIter;
             }
         }
+
+        Logger->writeToLogOpenClose(open, close, false);
     }
+    Logger->writeToLogOpenClose(open, close, true);
+
     std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::now();
 
     sresult.time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()) / 1000000000;
