@@ -161,16 +161,16 @@ void XmlLogger::writeToLogOpenClose(const std::vector<Node> &open, const std::ma
 
     while(curIter != open.end()) {
         if(curIter->g != 0) {
-            el->SetAttribute(CNS_TAG_ATTR_PARX, curIter->parent->j);
+            el->SetAttribute(CNS_TAG_ATTR_PARX, curIter->parent->i);
 
-            el->SetAttribute(CNS_TAG_ATTR_PARY, curIter->parent->i);
+            el->SetAttribute(CNS_TAG_ATTR_PARY, curIter->parent->j);
         }
 
         el = doc.NewElement(CNS_TAG_POINT);
 
-        el->SetAttribute(CNS_TAG_ATTR_X, curIter->j);
+        el->SetAttribute(CNS_TAG_ATTR_X, curIter->i);
 
-        el->SetAttribute(CNS_TAG_ATTR_Y, curIter->i);
+        el->SetAttribute(CNS_TAG_ATTR_Y, curIter->j);
 
         el->SetAttribute(CNS_TAG_ATTR_F, curIter->F);
 
@@ -188,21 +188,21 @@ void XmlLogger::writeToLogOpenClose(const std::vector<Node> &open, const std::ma
     auto newIter = close.begin();
 
     while(newIter != close.end()) {
+        if (newIter->second.g > 0) {
+            el->SetAttribute(CNS_TAG_ATTR_PARX, newIter->second.parent->i);
+
+            el->SetAttribute(CNS_TAG_ATTR_PARY, newIter->second.parent->j);
+        }
+
         el = doc.NewElement(CNS_TAG_POINT);
 
-        el->SetAttribute(CNS_TAG_ATTR_X, newIter->second.j);
+        el->SetAttribute(CNS_TAG_ATTR_X, newIter->second.i);
 
-        el->SetAttribute(CNS_TAG_ATTR_Y, newIter->second.i);
+        el->SetAttribute(CNS_TAG_ATTR_Y, newIter->second.j);
 
         el->SetAttribute(CNS_TAG_ATTR_F, newIter->second.F);
 
         el->SetAttribute(CNS_TAG_ATTR_G, newIter->second.g);
-
-        if (newIter->second.g > 0) {
-            el->SetAttribute(CNS_TAG_ATTR_PARX, newIter->second.parent->j);
-
-            el->SetAttribute(CNS_TAG_ATTR_PARY, newIter->second.parent->i);
-        }
 
         chel->InsertEndChild(el);
 
